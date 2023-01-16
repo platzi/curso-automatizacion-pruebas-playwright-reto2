@@ -35,3 +35,11 @@ Debes de hacer un "Fork" de este proyecto, revolver los problemas y crear un Pul
 ## Licencia
 
 Este proyecto se lanza bajo la licencia [MIT](https://opensource.org/licenses/MIT).
+
+## Troubleshooting / Resolución de problemas
+
+Muy probablemente al momento de descargar e instalar las dependencias de este repo vayas a necesitar actualizar las librerias de `Playwright Test` o `Playwright`, por lo que es recomendable actualizarla con el siguiente comando:
+
+```
+npx playwright install
+```
