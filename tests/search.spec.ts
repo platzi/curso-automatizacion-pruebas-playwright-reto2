@@ -5,15 +5,17 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Realizar una busqueda que no tenga resultados', async ({ page }) => {
-  await page.getByRole('button').click();
+  await page.getByRole('button', { name: 'Search' }).click();
 
   await page.getByPlaceholder('Search docs').click();
 
   await page.getByPlaceholder('Search docs').fill('hascontent');
 
-  expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
+  const results = page.locator('p.DocSearch-Title');
 
-  expect(page.locator('.DocSearch-NoResults p')).toHaveText('No results for hascontent');
+  await expect(results).toBeVisible();
+
+  await expect(results).toHaveText('No results for "hascontent"');
 
 })
 
@@ -26,7 +28,7 @@ test('Limpiar el input de busqueda', async ({ page }) => {
 
   await searchBox.fill('somerandomtext');
 
-  await expect(searchBox).toHaveText('somerandomtext');
+  await expect(searchBox).toHaveValue('somerandomtext');
 
   await page.getByRole('button', { name: 'Clear the query' }).click();
 
@@ -34,15 +36,15 @@ test('Limpiar el input de busqueda', async ({ page }) => {
 });
 
 test('Realizar una busqueda que genere al menos tenga un resultado', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search ' }).click();
+  await page.getByRole('button', { name: 'Search' }).click();
 
   const searchBox = page.getByPlaceholder('Search docs');
 
   await searchBox.click();
 
-  await page.getByPlaceholder('Search docs').fill('havetext');
+  await searchBox.fill('havetext');
 
-  expect(searchBox).toHaveText('havetext');
+  await expect(searchBox).toHaveValue('havetext');
 
   // Verity there are sections in the results
   await page.locator('.DocSearch-Dropdown-Container section').nth(1).waitFor();
