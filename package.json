@@ -3,11 +3,17 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test search",
+    "test:report": "npx playwright show-report",
+    "test:debug": "cross-env PWDEBUG=console npx playwright test search"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@playwright/test": "^1.27.1"
+    "@playwright/test": "^1.41.1",
+    "@types/node": "^20.11.14",
+    "cross-env": "^7.0.3"
   }
 }
