@@ -1,52 +1,71 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  // Navega a la página web de Playwright antes de cada prueba.
+  await page.goto('https://playwright.dev/'); 
 });
 
 test('Realizar una busqueda que no tenga resultados', async ({ page }) => {
-  await page.getByRole('button').click();
+  // Hace clic en el botón de búsqueda.
+  await page.locator("button[aria-label='Search']").click(); 
 
-  await page.getByPlaceholder('Search docs').click();
+  // Hace clic en el cuadro de búsqueda.
+  await page.getByPlaceholder('Search docs').click(); 
 
-  await page.getByPlaceholder('Search docs').fill('hascontent');
+  // Rellena el cuadro de búsqueda con el término 'hascontent'.
+  await page.getByPlaceholder('Search docs').fill('hascontent'); 
 
-  expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
+  // Verifica que el título de la búsqueda esté visible.
+  await expect(page.locator('.DocSearch-Title')).toBeVisible(); 
 
-  expect(page.locator('.DocSearch-NoResults p')).toHaveText('No results for hascontent');
-
+  // Verifica que el texto del título sea 'No results for "hascontent"'.
+  await expect(page.locator('.DocSearch-Title')).toHaveText('No results for "hascontent"'); 
 })
 
 test('Limpiar el input de busqueda', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search' }).click();
+  // Hace clic en el botón de búsqueda.
+  await page.getByRole('button', { name: 'Search' }).click(); 
 
-  const searchBox = page.getByPlaceholder('Search docs');
+  // Obtiene el cuadro de búsqueda.
+  const searchBox = page.getByPlaceholder('Search docs'); 
 
-  await searchBox.click();
+  // Hace clic en el cuadro de búsqueda.
+  await searchBox.click(); 
 
-  await searchBox.fill('somerandomtext');
+  // Rellena el cuadro de búsqueda con el término 'somerandomtext'.
+  await searchBox.fill('somerandomtext'); 
 
-  await expect(searchBox).toHaveText('somerandomtext');
+  // Verifica que el valor del cuadro de búsqueda sea 'somerandomtext'.
+  await expect(searchBox).toHaveAttribute('value', 'somerandomtext'); 
 
-  await page.getByRole('button', { name: 'Clear the query' }).click();
+  // Hace clic en el botón para borrar la consulta de búsqueda.
+  await page.getByRole('button', { name: 'Clear the query' }).click(); 
 
-  await expect(searchBox).toHaveAttribute('value', '');
+  // Verifica que el valor del cuadro de búsqueda esté vacío.
+  await expect(searchBox).toHaveAttribute('value', ''); 
 });
 
 test('Realizar una busqueda que genere al menos tenga un resultado', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search ' }).click();
+  // Hace clic en el botón de búsqueda.
+  await page.getByRole('button', { name: 'Search' }).click(); 
 
-  const searchBox = page.getByPlaceholder('Search docs');
+  // Obtiene el cuadro de búsqueda.
+  const searchBox = page.getByPlaceholder('Search docs'); 
 
-  await searchBox.click();
+  // Hace clic en el cuadro de búsqueda.
+  await searchBox.click(); 
 
-  await page.getByPlaceholder('Search docs').fill('havetext');
+  // Rellena el cuadro de búsqueda con el término 'havetext'.
+  await page.getByPlaceholder('Search docs').fill('havetext'); 
 
-  expect(searchBox).toHaveText('havetext');
+  // Verifica que el valor del cuadro de búsqueda sea 'havetext'.
+  expect(searchBox).toHaveAttribute('value', 'havetext'); 
 
-  // Verity there are sections in the results
-  await page.locator('.DocSearch-Dropdown-Container section').nth(1).waitFor();
-  const numberOfResults = await page.locator('.DocSearch-Dropdown-Container section').count();
-  await expect(numberOfResults).toBeGreaterThan(0);
-
+  // Verifica que haya secciones en los resultados de la búsqueda.
+  // Espera a que aparezca al menos una sección en los resultados de la búsqueda.
+  await page.locator('.DocSearch-Dropdown-Container section').nth(1).waitFor(); 
+  // Cuenta el número de secciones en los resultados de la búsqueda.
+  const numberOfResults = await page.locator('.DocSearch-Dropdown-Container section').count(); 
+  // Verifica que el número de secciones sea mayor que cero.
+  await expect(numberOfResults).toBeGreaterThan(0); 
 });
