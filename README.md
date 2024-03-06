@@ -13,6 +13,8 @@ En este reto vas a encontrar tests que en este momento no funcionan, tu misión 
 1. Hacer el fork de este proyecto en tu espacio personal
 1. Clonar el repositorio desde tu espacio personal en tu computadora
 1. Instalar dependencias, con el comando `npm install`
+1. Inicializar el repositorio como un proyecto de playwright
+`npx playwright install`
 
 ## Pruebas
 
