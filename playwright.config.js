@@ -1,5 +1,4 @@
-import type { PlaywrightTestConfig } from '@playwright/test';
-import { devices } from '@playwright/test';
+const { devices } = require('@playwright/test');
 
 /**
  * Read environment variables from file.
@@ -10,7 +9,7 @@ import { devices } from '@playwright/test';
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-const config: PlaywrightTestConfig = {
+const config = {
   testDir: './tests',
   /* Maximum time one test can run for. */
   timeout: 30 * 1000,
@@ -36,8 +35,7 @@ const config: PlaywrightTestConfig = {
     /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
     actionTimeout: 0,
     /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://playwright.deev/docs/intro',
-
+    baseURL: 'https://playwright.dev/docs/intro',
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: 'on-first-retry',
   },
@@ -104,4 +102,5 @@ const config: PlaywrightTestConfig = {
   // },
 };
 
-export default config;
+module.exports = config;
+
