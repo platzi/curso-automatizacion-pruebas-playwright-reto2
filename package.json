@@ -1,13 +1,14 @@
 {
-  "name": "testthedocs",
+  "name": "playwright",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
   "scripts": {},
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "@playwright/test": "^1.27.1"
+    "@playwright/test": "^1.46.0",
+    "@types/node": "^20.14.11"
   }
 }
