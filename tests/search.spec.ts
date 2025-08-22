@@ -5,44 +5,51 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Realizar una busqueda que no tenga resultados', async ({ page }) => {
-  await page.getByRole('button').click();
+  // Click en el botón de búsqueda (lupa)
+  await page.getByRole('button', { name: 'Search'}).click();
 
+  // Seleccionamos el input de búsqueda por placeholder
   await page.getByPlaceholder('Search docs').click();
-
   await page.getByPlaceholder('Search docs').fill('hascontent');
 
-  expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
-
-  expect(page.locator('.DocSearch-NoResults p')).toHaveText('No results for hascontent');
-
-})
+  // Esperamos a que aparezca el mensaje de no resultados
+  await expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
+  await expect(page.locator('.DocSearch-NoResults p')).toHaveText('No results for "hascontent"');
+});
 
 test('Limpiar el input de busqueda', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search' }).click();
+    // Abrir el cuadro de búsqueda
+  await page.getByRole('button', { name: 'Search'}).click();
 
+  // Obtener el input y escribir texto
   const searchBox = page.getByPlaceholder('Search docs');
-
-  await searchBox.click();
-
   await searchBox.fill('somerandomtext');
 
-  await expect(searchBox).toHaveText('somerandomtext');
+  // Verificar que el input tenga el texto escrito
+  //await expect(searchBox).toHaveValue('somerandomtext');
+  await expect(searchBox).toHaveAttribute('value', 'somerandomtext')
 
-  await page.getByRole('button', { name: 'Clear the query' }).click();
+  // Hacer clic en el botón para limpiar el input (botón con aria-label 'Clear query')
 
+  await page.getByRole('button', { name: 'Clear the query'}).click();
+
+  // Verificar que el input esté vacío
   await expect(searchBox).toHaveAttribute('value', '');
 });
 
 test('Realizar una busqueda que genere al menos tenga un resultado', async ({ page }) => {
+
+  // Click en el botón de búsqueda (lupa)
   await page.getByRole('button', { name: 'Search ' }).click();
 
   const searchBox = page.getByPlaceholder('Search docs');
 
   await searchBox.click();
 
-  await page.getByPlaceholder('Search docs').fill('havetext');
+  await page.getByPlaceholder('Search docs').fill('toHaveText​');
 
-  expect(searchBox).toHaveText('havetext');
+  const expectedSearch = page.getByRole('link', { name: 'toHaveText​ LocatorAssertions' });
+  await expect(expectedSearch).toContainText('toHaveText​');
 
   // Verity there are sections in the results
   await page.locator('.DocSearch-Dropdown-Container section').nth(1).waitFor();
