@@ -1,52 +1,50 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  await page.goto("/");
 });
 
-test('Realizar una busqueda que no tenga resultados', async ({ page }) => {
-  await page.getByRole('button').click();
+test("Realizar una búsqueda sin resultados", async ({ page }) => {
+  await page.locator("button.DocSearch-Button").click();
 
-  await page.getByPlaceholder('Search docs').click();
+  const searchBox = page.getByPlaceholder(/search docs/i);
 
-  await page.getByPlaceholder('Search docs').fill('hascontent');
+  await searchBox.fill("hascontent");
 
-  expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
+  await expect(page.locator(".DocSearch-NoResults p")).toBeVisible();
 
-  expect(page.locator('.DocSearch-NoResults p')).toHaveText('No results for hascontent');
-
-})
-
-test('Limpiar el input de busqueda', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search' }).click();
-
-  const searchBox = page.getByPlaceholder('Search docs');
-
-  await searchBox.click();
-
-  await searchBox.fill('somerandomtext');
-
-  await expect(searchBox).toHaveText('somerandomtext');
-
-  await page.getByRole('button', { name: 'Clear the query' }).click();
-
-  await expect(searchBox).toHaveAttribute('value', '');
+  await expect(page.locator(".DocSearch-NoResults p")).toHaveText(
+    'No results for "hascontent"'
+  );
 });
 
-test('Realizar una busqueda que genere al menos tenga un resultado', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search ' }).click();
+test("Limpiar el input de búsqueda", async ({ page }) => {
+  await page.locator("button.DocSearch-Button").click();
 
-  const searchBox = page.getByPlaceholder('Search docs');
+  const searchBox = page.getByPlaceholder(/search docs/i);
 
-  await searchBox.click();
+  await searchBox.fill("somerandomtext");
 
-  await page.getByPlaceholder('Search docs').fill('havetext');
+  await expect(searchBox).toHaveValue("somerandomtext");
 
-  expect(searchBox).toHaveText('havetext');
+  await page.locator("button.DocSearch-Reset").click();
 
-  // Verity there are sections in the results
-  await page.locator('.DocSearch-Dropdown-Container section').nth(1).waitFor();
-  const numberOfResults = await page.locator('.DocSearch-Dropdown-Container section').count();
-  await expect(numberOfResults).toBeGreaterThan(0);
+  await expect(searchBox).toHaveValue("");
+});
 
+test("Realizar una búsqueda con resultados", async ({ page }) => {
+  await page.locator("button.DocSearch-Button").click();
+
+  const searchBox = page.getByPlaceholder(/search docs/i);
+
+  await searchBox.fill("havetext");
+
+  await expect(searchBox).toHaveValue("havetext");
+
+  // Wait for results to load and verify there is at least one section
+  const sections = page.locator(".DocSearch-Dropdown-Container section");
+  await sections.first().waitFor();
+  const count = await sections.count();
+  await expect(count).toBeGreaterThan(0);
+  console.log("Number of results:", count);
 });
