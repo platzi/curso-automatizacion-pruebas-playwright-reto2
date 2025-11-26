@@ -5,44 +5,41 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('Realizar una busqueda que no tenga resultados', async ({ page }) => {
-  await page.getByRole('button').click();
 
+  const keywordSearched = 'hascontent';
+  
+  await page.getByRole('button', { name: 'Search (Ctrl+K)' }).click();
   await page.getByPlaceholder('Search docs').click();
-
-  await page.getByPlaceholder('Search docs').fill('hascontent');
-
-  expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
-
-  expect(page.locator('.DocSearch-NoResults p')).toHaveText('No results for hascontent');
+  await page.getByPlaceholder('Search docs').fill(keywordSearched);
+  await expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
+  await expect(page.locator('.DocSearch-NoResults p')).toHaveText(
+    `No results for "${keywordSearched}"`,
+  );
 
 })
 
 test('Limpiar el input de busqueda', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search' }).click();
 
+  const keywordSearched = 'somerandomtext';
+
+  await page.getByRole('button', { name: 'Search (Ctrl+K)' }).click();
   const searchBox = page.getByPlaceholder('Search docs');
-
   await searchBox.click();
-
-  await searchBox.fill('somerandomtext');
-
-  await expect(searchBox).toHaveText('somerandomtext');
-
+  await searchBox.fill(keywordSearched);
+  await expect(searchBox).toHaveValue(keywordSearched);
   await page.getByRole('button', { name: 'Clear the query' }).click();
-
   await expect(searchBox).toHaveAttribute('value', '');
 });
 
 test('Realizar una busqueda que genere al menos tenga un resultado', async ({ page }) => {
-  await page.getByRole('button', { name: 'Search ' }).click();
 
+  const keybwordSearched = 'havetext';
+
+  await page.getByRole('button', { name: 'Search (Ctrl+K)' }).click();
   const searchBox = page.getByPlaceholder('Search docs');
-
   await searchBox.click();
-
-  await page.getByPlaceholder('Search docs').fill('havetext');
-
-  expect(searchBox).toHaveText('havetext');
+  await page.getByPlaceholder('Search docs').fill(keybwordSearched);
+  await expect(searchBox).toHaveValue(keybwordSearched);
 
   // Verity there are sections in the results
   await page.locator('.DocSearch-Dropdown-Container section').nth(1).waitFor();
