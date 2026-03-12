@@ -1,13 +1,20 @@
 {
-  "name": "testthedocs",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {},
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@playwright/test": "^1.27.1"
-  }
+	"name": "playwright",
+	"version": "1.0.0",
+	"main": "index.js",
+	"scripts": {
+		"format": "prettier --write .",
+	    "test": "echo \"Error: no test specified\" && exit 1",
+    	"test:debug": "PWDEBUG=1 npx playwright test tests/challenge1.spec.ts",
+    	"test:api": "DEBUG=pw:api npx playwright test tests/challenge1.spec.ts"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"description": "",
+	"devDependencies": {
+		"@playwright/test": "^1.58.2",
+		"@types/node": "^25.4.0",
+		"prettier": "^3.8.1"
+	}
 }
