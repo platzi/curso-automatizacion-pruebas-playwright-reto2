@@ -1,32 +1,32 @@
 import { test, expect } from '@playwright/test';
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('/');
+  await page.goto('https://playwright.dev/docs/intro');
 });
 
 test('Realizar una busqueda que no tenga resultados', async ({ page }) => {
-  await page.getByRole('button').click();
+  await page.locator('button[aria-label*=Search]').click();
 
   await page.getByPlaceholder('Search docs').click();
 
   await page.getByPlaceholder('Search docs').fill('hascontent');
 
-  expect(page.locator('.DocSearch-NoResults p')).toBeVisible();
+  await expect(page.locator('.DocSearch-NoResults')).toBeVisible();
 
-  expect(page.locator('.DocSearch-NoResults p')).toHaveText('No results for hascontent');
+  await expect(page.locator('.DocSearch-Title')).toContainText('No results for \"hascontent\"');
 
 })
 
 test('Limpiar el input de busqueda', async ({ page }) => {
   await page.getByRole('button', { name: 'Search' }).click();
 
-  const searchBox = page.getByPlaceholder('Search docs');
+  const searchBox = page.locator('#docsearch-input');
 
   await searchBox.click();
 
   await searchBox.fill('somerandomtext');
 
-  await expect(searchBox).toHaveText('somerandomtext');
+  await expect(searchBox).toHaveValue('somerandomtext');
 
   await page.getByRole('button', { name: 'Clear the query' }).click();
 
@@ -42,7 +42,7 @@ test('Realizar una busqueda que genere al menos tenga un resultado', async ({ pa
 
   await page.getByPlaceholder('Search docs').fill('havetext');
 
-  expect(searchBox).toHaveText('havetext');
+  await expect(searchBox).toHaveValue('havetext');
 
   // Verity there are sections in the results
   await page.locator('.DocSearch-Dropdown-Container section').nth(1).waitFor();
