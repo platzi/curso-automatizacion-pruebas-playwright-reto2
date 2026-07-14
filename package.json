@@ -1,13 +1,17 @@
 {
-  "name": "testthedocs",
+  "name": "playwright",
   "version": "1.0.0",
-  "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test": "npx playwright test",
+    "test:trace": "npx playwright test --trace on --reporter=html && npx playwright show-report"
+  },
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "description": "",
   "devDependencies": {
-    "@playwright/test": "^1.27.1"
+    "@playwright/test": "^1.61.1",
+    "@types/node": "^26.1.1"
   }
 }
