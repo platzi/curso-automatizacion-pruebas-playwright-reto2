@@ -30,16 +30,22 @@ const config: PlaywrightTestConfig = {
   /* Opt out of parallel tests on CI. */
   workers: process.env.CI ? 1 : undefined,
   /* Reporter to use. See https://playwright.dev/docs/test-reporters */
-  reporter: 'html',
+  reporter: [['html', { open: 'always' }]],
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
-    /* Maximum time each action such as `click()` can take. Defaults to 0 (no limit). */
-    actionTimeout: 0,
-    /* Base URL to use in actions like `await page.goto('/')`. */
-    baseURL: 'https://playwright.deev/docs/intro',
+    /* Abrir navegador visible para ver la ejecución en vivo (puedes poner true si no quieres que se abra) */
+    headless: false,
 
-    /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
-    trace: 'on-first-retry',
+    /* Tiempo máximo para acciones como click(). Si falla, no espera 30s sino 5s */
+    actionTimeout: 5000,
+    /* Base URL to use in actions like `await page.goto('/')`. */
+    baseURL: 'https://playwright.dev/docs/intro',
+
+    /* Guarda trazas completas si falla el test para inspeccionar en el reporte HTML */
+    trace: 'retain-on-failure',
+
+    /* Captura de pantalla automática en el reporte exactamente cuando un test se rompe */
+    screenshot: 'only-on-failure',
   },
 
   /* Configure projects for major browsers */
